@@ -33,12 +33,17 @@ local function show_warning(message)
 end
 
 local function worker(user_args)
-	  local args = user_args or {}
+    local args = user_args or {}
 
     local type = args.type or 'arc' -- arc or icon_and_text
-    local path_to_icon = args.path_to_icon or ICON_DIR .. 'brightness.svg'
+    local icon_dir = args.icon_dir or ICON_DIR
+    local path_to_icon = args.path_to_icon or icon_dir .. 'brightness.svg'
     local font = args.font or beautiful.font
     local timeout = args.timeout or 100
+
+    local thickness = args.thickness or 2
+    local size = args.size or 18
+    local max_value = args.max_value or 100
 
     local program = args.program or 'light'
     local step = args.step or 5
@@ -47,6 +52,7 @@ local function worker(user_args)
     local tooltip = args.tooltip or false
     local percentage = args.percentage or false
     local rmb_set_max = args.rmb_set_max or false
+
     if program == 'light' then
         get_brightness_cmd = 'light -G'
         set_brightness_cmd = 'light -S %d' -- <level>
@@ -104,11 +110,11 @@ local function worker(user_args)
                 valign = 'center',
                 layout = wibox.container.place
             },
-            max_value = 100,
-            thickness = 2,
+            max_value = max_value,
+            thickness = thickness,
             start_angle = 4.71238898, -- 2pi*3/4
-            forced_height = 18,
-            forced_width = 18,
+            forced_height = size,
+            forced_width = size,
             paddings = 2,
             widget = wibox.container.arcchart,
             set_value = function(self, level)
